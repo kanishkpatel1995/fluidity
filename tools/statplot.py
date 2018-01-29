@@ -45,7 +45,8 @@ class StatplotWindow(Gtk.Window):
         self.add(self._vBox)
 
         self._hBox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        self._vBox.pack_end(self._hBox, False, False, 0)
+        self._vBox.pack_end(child=self._hBox, expand=False, fill=False,
+                            padding=0)
 
         # The plot widget
         self._xField = None
@@ -57,27 +58,27 @@ class StatplotWindow(Gtk.Window):
 
         # The combos
         paths = sorted(self._stat.Paths())
+        assert(len(paths) > 1)
         self._xCombo = gui.ComboBoxFromEntries(paths)
         self._xCombo.connect("changed", self._XComboChanged)
-        if "ElapsedTime" in paths:
-            iter1 = self._xCombo.get_model(). \
-                get_iter("%d" % paths.index("ElapsedTime"))
-        else:
-            iter1 = self._xCombo.get_model().get_iter_first()
-        if iter1 is not None:
-            self._xCombo.set_active_iter(iter1)
-        self._hBox.pack_start(self._xCombo, True, True, 0)
-
         self._yCombo = gui.ComboBoxFromEntries(paths)
         self._yCombo.connect("changed", self._YComboChanged)
-        iter1 = self._yCombo.get_model().get_iter_first()
-        if iter1 is not None:
-            iter2 = self._yCombo.get_model().iter_next(iter1)
-            if iter2 is None:
-                self._yCombo.set_active_iter(iter1)
+        if "ElapsedTime" in paths:
+            ind = paths.index("ElapsedTime")
+            iterx = self._xCombo.get_model().get_iter("%d" % ind)
+            if ind == 0:
+                itery = self._yCombo.get_model().get_iter(1)
             else:
-                self._yCombo.set_active_iter(iter2)
-            self._hBox.pack_end(self._yCombo, True, True, 0)
+                itery = self._yCombo.get_model().get_iter_first()
+        else:
+            iterx = self._xCombo.get_model().get_iter_first()
+            itery = self._yCombo.get_model().get_iter(1)
+        self._xCombo.set_active_iter(iterx)
+        self._hBox.pack_start(child=self._xCombo, expand=True, fill=True,
+                              padding=0)
+        self._yCombo.set_active_iter(itery)
+        self._hBox.pack_end(child=self._yCombo, expand=True, fill=True,
+                            padding=0)
 
         self._vBox.show_all()
 
@@ -145,7 +146,8 @@ class StatplotWindow(Gtk.Window):
                 axis.set_xbound(bounds[0])
                 axis.set_ybound(bounds[1])
 
-            self._vBox.pack_start(self._plotWidget, True, True, 0)
+            self._vBox.pack_start(child=self._plotWidget, expand=True,
+                                  fill=True, padding=0)
             self._plotWidget.show_all()
             window.show_all()
             Gtk.main()

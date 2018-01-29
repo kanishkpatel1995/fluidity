@@ -55,14 +55,14 @@ if not gui.GuiDisabledByEnvironment():
     except ImportError:
         debug.deprint("Warning: Failed to import Gtk module")
     try:
-        import pylab
+        import matplotlib.pyplot as plt
     except ImportError:
-        debug.deprint("Warning: Failed to import pylab module")
+        debug.deprint("Warning: Failed to import pyplot module")
 
 
 class Plot:
     """
-    Class defining a pylab plot
+    Class defining a pyplot plot
     """
 
     def __init__(self, plot):
@@ -78,13 +78,13 @@ class Plot:
 
     def _CloseFigure(self):
         if self._plot is not None:
-            pylab.close(self._figure)
+            plt.close(self._figure)
 
         return
 
     def _NewFigure(self):
         self._CloseFigure()
-        self._figure = pylab.figure()
+        self._figure = plt.figure()
 
         return
 
@@ -121,7 +121,7 @@ class Plot:
 class ScatterPlot(Plot):
 
     """
-    A pylab scatter plot
+    A pyplot scatter plot
     """
 
     def __init__(self, x, y, xLabel=None, yLabel=None, bounds=None):
@@ -143,7 +143,7 @@ class ScatterPlot(Plot):
         assert(len(x) == len(y))
 
         self._NewFigure()
-        self._SetPlot(pylab.scatter(x=x, y=y, marker="+"))
+        self._SetPlot(plt.scatter(x, y, marker="+"))
 
         return
 
@@ -157,7 +157,7 @@ class ScatterPlot(Plot):
     def SetXLabel(self, label):
         assert(self._plot is not None)
 
-        self._plot.axes.set_xlabel(label)
+        self._plot.axes.set_xlabel(label, weight='bold')
 
         return
 
@@ -178,7 +178,7 @@ class ScatterPlot(Plot):
     def SetYLabel(self, label):
         assert(self._plot is not None)
 
-        self._plot.axes.set_ylabel(label)
+        self._plot.axes.set_ylabel(label, weight='bold', labelpad=20)
 
         return
 
@@ -257,15 +257,15 @@ class LinePlot(ScatterPlot):
         for i in range(fields):
             args += [x, yData[i], colours[i]]
 
-        pylab.plot(*args)
-        self._SetPlot(pylab.gca())
+        plt.plot(*args, color='blue')
+        self._SetPlot(plt.gca())
 
         return
 
 
 class ContourPlot(Plot):
     """
-    A pylab contour plot
+    A pyplot contour plot
     """
 
     def __init__(self, x, y, z, levels=None):
@@ -282,9 +282,9 @@ class ContourPlot(Plot):
 
         self._NewFigure()
         if levels is None:
-            self._SetPlot(pylab.contourf(x, y, z))
+            self._SetPlot(plt.contourf(x, y, z))
         else:
-            self._SetPlot(pylab.contourf(x, y, z, levels))
+            self._SetPlot(plt.contourf(x, y, z, levels))
 
         return
 
@@ -294,7 +294,7 @@ class plottingUnittests(unittest.TestCase):
         import matplotlib
         from matplotlib.backends.backend_gtk3cairo import FigureCanvasGTK3Cairo
         from matplotlib.backends.backend_gtk3 import NavigationToolbar2GTK3
-        import pylab
+        import matplotlib.pyplot
 
         self.assertTrue(MatplotlibSupport())
 
