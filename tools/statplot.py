@@ -22,8 +22,11 @@ import fluidity.diagnostics.fluiditytools as fluidity_tools
 import fluidity.diagnostics.gui as gui
 import fluidity.diagnostics.plotting as plotting
 
+# Use Argparse library in order to deal with the program's arguments
 parser = argparse.ArgumentParser()
+# Add an entry for the .stat file
 parser.add_argument('statfile', nargs=1)
+# Get all the arguments (except the executable's name)
 args = parser.parse_args(sys.argv[1:])
 
 
@@ -209,7 +212,8 @@ class StatplotWindow(Gtk.Window):
         return
 
 
-# The window
+# Set up the GUI window by applying the StatplotWindow Class on the file
+# provided by the user (read by the Argparse library.)
 window = StatplotWindow(args.statfile)
 window.set_default_size(1280, 720)
 window.set_position(Gtk.WindowPosition.CENTER)
