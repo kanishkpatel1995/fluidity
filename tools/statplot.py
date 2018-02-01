@@ -10,7 +10,9 @@ import argparse
 import sys
 import time
 
-import gtk
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
 
 import fluidity.diagnostics.fluiditytools as fluidity_tools
 import fluidity.diagnostics.gui as gui
@@ -23,22 +25,22 @@ parser.add_argument('statfile', nargs=1)
 # Get all the arguments (except the executable's name)
 args = parser.parse_args(sys.argv[1:])
 
-class StatplotWindow(gtk.Window):
+class StatplotWindow(Gtk.Window):
   def __init__(self, filenames):
     self._filenames = filenames
 
-    gtk.Window.__init__(self)
+    Gtk.Window.__init__(self)
     self.set_title(self._filenames[-1])
     self.connect("key-press-event", self._KeyPressed)
 
     self._ReadData()
 
     # Containers
-    self._vBox = gtk.VBox()
+    self._vBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
     self.add(self._vBox)
 
-    self._hBox = gtk.HBox()
-    self._vBox.pack_end(self._hBox, expand = False, fill = False)
+    self._hBox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+    self._vBox.pack_end(self._hBox, expand=False, fill=False, padding=0)
 
     # The plot widget
     self._xField = None
@@ -59,7 +61,7 @@ class StatplotWindow(gtk.Window):
       iter = self._xCombo.get_model().get_iter_first()
     if not iter is None:
       self._xCombo.set_active_iter(iter)
-    self._hBox.pack_start(self._xCombo)
+    self._hBox.pack_start(self._xCombo, expand=True, fill=True, padding=0)
 
     self._yCombo = gui.ComboBoxFromEntries(paths)
     self._yCombo.connect("changed", self._YComboChanged)
@@ -70,7 +72,7 @@ class StatplotWindow(gtk.Window):
         self._yCombo.set_active_iter(iter)
       else:
         self._yCombo.set_active_iter(iter2)
-    self._hBox.pack_end(self._yCombo)
+    self._hBox.pack_end(self._yCombo, expand=True, fill=True, padding=0)
 
     self._vBox.show_all()
 
@@ -136,7 +138,8 @@ class StatplotWindow(gtk.Window):
         axis.set_xbound(bounds[0])
         axis.set_ybound(bounds[1])
 
-      self._vBox.pack_start(self._plotWidget)
+      self._vBox.pack_start(self._plotWidget, expand=True, fill=True,
+                            padding=0)
       self._plotWidget.show_all()
 
     return
