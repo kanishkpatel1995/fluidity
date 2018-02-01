@@ -6,63 +6,40 @@
 Plot data in a .stat file
 """
 
-import getopt
-import os
+import argparse
 import sys
 import time
 
 import gtk
 
-import fluidity.diagnostics.debug as debug
 import fluidity.diagnostics.fluiditytools as fluidity_tools
 import fluidity.diagnostics.gui as gui
 import fluidity.diagnostics.plotting as plotting
 
-def Help():
-  debug.dprint("Usage: statplot [OPTIONS] FILENAME [FILENAME ...]\n" + \
-               "\n" + \
-               "Options:\n" + \
-               "\n" + \
-               "-h  Display this help\n" + \
-               "-v  Verbose mode",  0)
-
-  return
-
-try:
-  opts, args = getopt.getopt(sys.argv[1:], "hv")
-except getopt.GetoptError:
-  Help()
-  sys.exit(-1)
-  
-if not ("-v", "") in opts:
-  debug.SetDebugLevel(0)
-  
-if ("-h", "") in opts:
-  Help()
-  sys.exit(1)
-  
-if len(args) == 0:
-  debug.FatalError("Filename must be specified")
+# Use Argparse library in order to deal with the program's arguments
+parser = argparse.ArgumentParser()
+# Add an entry for the .stat file
+parser.add_argument('statfile', nargs=1)
+# Get all the arguments (except the executable's name)
+args = parser.parse_args(sys.argv[1:])
 
 class StatplotWindow(gtk.Window):
   def __init__(self, filenames):
-    assert(len(filenames) > 0)
-    
     self._filenames = filenames
-  
+
     gtk.Window.__init__(self)
     self.set_title(self._filenames[-1])
     self.connect("key-press-event", self._KeyPressed)
-    
+
     self._ReadData()
 
     # Containers
     self._vBox = gtk.VBox()
     self.add(self._vBox)
-    
+
     self._hBox = gtk.HBox()
     self._vBox.pack_end(self._hBox, expand = False, fill = False)
-    
+
     # The plot widget
     self._xField = None
     self._yField = None
@@ -70,7 +47,7 @@ class StatplotWindow(gtk.Window):
     self._yData = None
     self._plotWidget = None
     self._plotType = plotting.LinePlot
-    
+
     # The combos
     paths = self._stat.Paths()
     paths.sort()
@@ -83,7 +60,7 @@ class StatplotWindow(gtk.Window):
     if not iter is None:
       self._xCombo.set_active_iter(iter)
     self._hBox.pack_start(self._xCombo)
-    
+
     self._yCombo = gui.ComboBoxFromEntries(paths)
     self._yCombo.connect("changed", self._YComboChanged)
     iter = self._yCombo.get_model().get_iter_first()
@@ -94,11 +71,11 @@ class StatplotWindow(gtk.Window):
       else:
         self._yCombo.set_active_iter(iter2)
     self._hBox.pack_end(self._yCombo)
-    
+
     self._vBox.show_all()
-    
+
     return
-    
+
   def _ReadData(self):
     stats = []
     for i, filename in enumerate(self._filenames):
@@ -117,9 +94,9 @@ class StatplotWindow(gtk.Window):
       self._stat = stats[0]
     else:
       self._stat = fluidity_tools.JoinStat(*stats)
-      
+
     return
-    
+
   def _RefreshData(self, keepBounds = False):
     self._xField = self._xCombo.get_active_text()
     self._xData = self._stat[self._xField]
@@ -131,7 +108,7 @@ class StatplotWindow(gtk.Window):
     else:
       bounds = None
     self._RefreshPlot(bounds)
-    
+
     return
 
   def _RefreshPlot(self, bounds = None, xscale = None, yscale = None):
@@ -139,7 +116,7 @@ class StatplotWindow(gtk.Window):
       assert(len(self._xData) == len(self._yData))
       if not self._plotWidget is None:
         self._vBox.remove(self._plotWidget)
-      
+
         axis = self._plotWidget.get_children()[0].figure.get_axes()[0]
         if xscale is None:
           xscale = axis.get_xscale()
@@ -150,7 +127,7 @@ class StatplotWindow(gtk.Window):
           xscale = "linear"
         if yscale is None:
           yscale = "linear"
-        
+
       self._plotWidget = self._plotType(x = self._xData, y = self._yData, xLabel = self._xField, yLabel = self._yField).Widget()
       axis = self._plotWidget.get_children()[0].figure.get_axes()[0]
       axis.set_xscale(xscale)
@@ -158,38 +135,38 @@ class StatplotWindow(gtk.Window):
       if not bounds is None:
         axis.set_xbound(bounds[0])
         axis.set_ybound(bounds[1])
-      
+
       self._vBox.pack_start(self._plotWidget)
       self._plotWidget.show_all()
-    
+
     return
-    
+
   def SetXField(self, field):
     self._xField = field
     self._xData = self._stat[self._xField]
-    
+
     self._RefreshPlot()
-    
+
     return
-    
+
   def SetYField(self, field):
     self._yField =  field
     self._yData = self._stat[self._yField]
-    
+
     self._RefreshPlot()
-      
+
     return
-    
+
   def _XComboChanged(self, widget):
     self.SetXField(self._xCombo.get_active_text())
-      
+
     return
-    
+
   def _YComboChanged(self, widget):
     self.SetYField(self._yCombo.get_active_text())
-      
+
     return
-    
+
   def _KeyPressed(self, widget, event):
     char = event.string
     if char == "R":
@@ -218,11 +195,13 @@ class StatplotWindow(gtk.Window):
     elif char == "s":
       self._plotType = plotting.ScatterPlot
       self._RefreshData(keepBounds = True)
-            
+
     return
 
-# The window
-window = StatplotWindow(args)
+
+# Set up the GUI window by applying the StatplotWindow Class on the file
+# provided by the user (read by the Argparse library.)
+window = StatplotWindow(args.statfile)
 window.set_default_size(640, 480)
 
 # Fire up the GUI
