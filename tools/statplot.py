@@ -141,6 +141,8 @@ class StatplotWindow(Gtk.Window):
       self._vBox.pack_start(self._plotWidget, expand=True, fill=True,
                             padding=0)
       self._plotWidget.show_all()
+      window.show_all()
+      Gtk.main()
 
     return
 
