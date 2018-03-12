@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+
 from optparse import OptionParser
 import sys
 import shutil
@@ -84,7 +86,7 @@ for line in f:
       globals['z'] = float(cols[3])
       if eval(region, globals):
         xyz = eval(transformation, globals)
-        line = `index`+' '+`xyz[0]`+' '+`xyz[1]`+' '+`xyz[2]`
+        line = repr(index)+' '+repr(xyz[0])+' '+repr(xyz[1])+' '+repr(xyz[2])
   newf.write(line + '\n')
 
 newf.close()

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-
+<?xml version='1.0' encoding='UTF-8'?>
 <testproblem>
   <name>test_pressure_solve_small</name>
   <owner userid="colin"/>
@@ -41,37 +40,37 @@ withoutlump = withoutlump [1:,:]
   </variables>
   <pass_tests>
     <test name="with vertical lumping and internal smoother check error" language="python">
-print withadd[12,1],2.0e-9
+print(withadd[12,1],2.0e-9)
 assert withadd[12,1] &lt; 2.0e-9
-    </test>
+</test>
     <test name="with vertical lumping and internal smoother check flops" language="python">
-print withadd[12,2], 2.0e6
+print(withadd[12,2], 2.0e6)
 assert withadd[12,2] &lt; 2.0e6
-    </test>
+</test>
     <test name="with vertical lumping and internal smoother and wrapped SOR check error" language="python">
-print withwrap[12,1],2.0e-9
+print(withwrap[12,1],2.0e-9)
 assert withwrap[12,1] &lt; 2.0e-9
-    </test>
+</test>
     <test name="with vertical lumping and internal smoother and wrapped SOR check flops" language="python">
-print withwrap[12,2], 2.0e6
+print(withwrap[12,2], 2.0e6)
 assert withwrap[12,2] &lt; 2.0e6
-    </test>
+</test>
     <test name="with vertical lumping without internal smoother check error" language="python">
-print withoutadd[11,1], 5.0e-9
+print(withoutadd[11,1], 5.0e-9)
 assert withoutadd[11,1] &lt; 5.0e-9
-    </test>
+</test>
     <test name="with vertical lumping without internal smoother check flops" language="python">
-print withoutadd[11,2], 5e5
+print(withoutadd[11,2], 5e5)
 assert withoutadd[11,2] &lt; 5e5
-    </test>
+</test>
     <test name="without vertical lumping check error" language="python">
-print withoutlump[6,1], 5.0e-9
+print(withoutlump[6,1], 5.0e-9)
 assert withoutlump[6,1] &lt; 5.0e-9
-    </test>
+</test>
     <test name="without vertical lumping check flops" language="python">
-print withoutlump[6,2], 2.0e5
+print(withoutlump[6,2], 2.0e5)
 assert withoutlump[6,2] &lt; 2.0e5
-    </test>
+</test>
   </pass_tests>
   <warn_tests>
   </warn_tests>

@@ -26,6 +26,7 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
 #    USA
 
+from __future__ import print_function
 import sys
 import os
 from numpy import *
@@ -64,7 +65,7 @@ except:
     sys.exit(1)
 
 if(right<left):
-    print "Error: right should be greater than left"
+    print("Error: right should be greater than left")
     parser.print_help()
     sys.exist(1)
 
@@ -74,10 +75,10 @@ if options.dx:
     right=right+0.01*dx
     nodes=arange(left, right, dx)
 elif options.variable_dx:
-    exec file(options.variable_dx)
+    exec(file(options.variable_dx))
     nodes=[left]
-    while nodes[-1]<(right-float(`val(right)`)):
-        nodes.append(nodes[-1]+ float(`val(nodes[-1])`))
+    while nodes[-1]<(right-float(str(val(right)))):
+        nodes.append(nodes[-1]+ float(str(val(nodes[-1]))))
     #force last node to be equal to right as specified by user
     nodes.append(right)
 else:
@@ -114,10 +115,10 @@ meshfile.write("1 15 2 1 1 1\n")
 meshfile.write("2 15 2 2 %d %d\n" % (len(eles)+1, len(eles)+1))
 
 if options.region_ids:
-    exec file(options.region_ids)
+    exec(file(options.region_ids))
 else:
     def val(X):
-	return 1
+        return 1
 
 for e in range(len(eles)):
     ele = eles[e]

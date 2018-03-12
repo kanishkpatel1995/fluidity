@@ -7,6 +7,8 @@
 #
 ##########################################
 
+from __future__ import print_function
+
 import numpy,sys,copy,operator
 
 class State:
