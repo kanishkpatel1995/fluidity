@@ -1,0 +1,100 @@
+<header>
+<constant name="FluidityVersion" type="string" value="fluidity-kp:2409bf4b4778accdc876c0d6db391ce15ecec896" />
+<constant name="CompileTime" type="string" value="Mar 13 2018 15:06:40" />
+<constant name="StartTime" type="string" value="20180319 160437.964+0530" />
+<constant name="HostName" type="string" value="Unknown" />
+<constant name="format" type="string" value="plain_text" />
+<field column="1" name="ElapsedTime" statistic="value"/>
+<field column="2" name="dt" statistic="value"/>
+<field column="3" name="ElapsedWallTime" statistic="value"/>
+<field column="4" name="CoordinateMesh" statistic="nodes"/>
+<field column="5" name="CoordinateMesh" statistic="elements"/>
+<field column="6" name="CoordinateMesh" statistic="surface_elements"/>
+<field column="7" name="m0_anal" statistic="min" material_phase="fluid"/>
+<field column="8" name="m0_anal" statistic="max" material_phase="fluid"/>
+<field column="9" name="m0_anal" statistic="l2norm" material_phase="fluid"/>
+<field column="10" name="m0_anal" statistic="integral" material_phase="fluid"/>
+<field column="11" name="m1_anal" statistic="min" material_phase="fluid"/>
+<field column="12" name="m1_anal" statistic="max" material_phase="fluid"/>
+<field column="13" name="m1_anal" statistic="l2norm" material_phase="fluid"/>
+<field column="14" name="m1_anal" statistic="integral" material_phase="fluid"/>
+<field column="15" name="m2_anal" statistic="min" material_phase="fluid"/>
+<field column="16" name="m2_anal" statistic="max" material_phase="fluid"/>
+<field column="17" name="m2_anal" statistic="l2norm" material_phase="fluid"/>
+<field column="18" name="m2_anal" statistic="integral" material_phase="fluid"/>
+<field column="19" name="m3_anal" statistic="min" material_phase="fluid"/>
+<field column="20" name="m3_anal" statistic="max" material_phase="fluid"/>
+<field column="21" name="m3_anal" statistic="l2norm" material_phase="fluid"/>
+<field column="22" name="m3_anal" statistic="integral" material_phase="fluid"/>
+<field column="23" name="Abscissa_0" statistic="min" material_phase="fluid"/>
+<field column="24" name="Abscissa_0" statistic="max" material_phase="fluid"/>
+<field column="25" name="Abscissa_0" statistic="l2norm" material_phase="fluid"/>
+<field column="26" name="Abscissa_0" statistic="integral" material_phase="fluid"/>
+<field column="27" name="Abscissa_1" statistic="min" material_phase="fluid"/>
+<field column="28" name="Abscissa_1" statistic="max" material_phase="fluid"/>
+<field column="29" name="Abscissa_1" statistic="l2norm" material_phase="fluid"/>
+<field column="30" name="Abscissa_1" statistic="integral" material_phase="fluid"/>
+<field column="31" name="Weight_0" statistic="min" material_phase="fluid"/>
+<field column="32" name="Weight_0" statistic="max" material_phase="fluid"/>
+<field column="33" name="Weight_0" statistic="l2norm" material_phase="fluid"/>
+<field column="34" name="Weight_0" statistic="integral" material_phase="fluid"/>
+<field column="35" name="Weight_0Source" statistic="min" material_phase="fluid"/>
+<field column="36" name="Weight_0Source" statistic="max" material_phase="fluid"/>
+<field column="37" name="Weight_0Source" statistic="l2norm" material_phase="fluid"/>
+<field column="38" name="Weight_0Source" statistic="integral" material_phase="fluid"/>
+<field column="39" name="Weight_1" statistic="min" material_phase="fluid"/>
+<field column="40" name="Weight_1" statistic="max" material_phase="fluid"/>
+<field column="41" name="Weight_1" statistic="l2norm" material_phase="fluid"/>
+<field column="42" name="Weight_1" statistic="integral" material_phase="fluid"/>
+<field column="43" name="Weight_1Source" statistic="min" material_phase="fluid"/>
+<field column="44" name="Weight_1Source" statistic="max" material_phase="fluid"/>
+<field column="45" name="Weight_1Source" statistic="l2norm" material_phase="fluid"/>
+<field column="46" name="Weight_1Source" statistic="integral" material_phase="fluid"/>
+<field column="47" name="WeightedAbscissa_0" statistic="min" material_phase="fluid"/>
+<field column="48" name="WeightedAbscissa_0" statistic="max" material_phase="fluid"/>
+<field column="49" name="WeightedAbscissa_0" statistic="l2norm" material_phase="fluid"/>
+<field column="50" name="WeightedAbscissa_0" statistic="integral" material_phase="fluid"/>
+<field column="51" name="WeightedAbscissa_0Source" statistic="min" material_phase="fluid"/>
+<field column="52" name="WeightedAbscissa_0Source" statistic="max" material_phase="fluid"/>
+<field column="53" name="WeightedAbscissa_0Source" statistic="l2norm" material_phase="fluid"/>
+<field column="54" name="WeightedAbscissa_0Source" statistic="integral" material_phase="fluid"/>
+<field column="55" name="WeightedAbscissa_1" statistic="min" material_phase="fluid"/>
+<field column="56" name="WeightedAbscissa_1" statistic="max" material_phase="fluid"/>
+<field column="57" name="WeightedAbscissa_1" statistic="l2norm" material_phase="fluid"/>
+<field column="58" name="WeightedAbscissa_1" statistic="integral" material_phase="fluid"/>
+<field column="59" name="WeightedAbscissa_1Source" statistic="min" material_phase="fluid"/>
+<field column="60" name="WeightedAbscissa_1Source" statistic="max" material_phase="fluid"/>
+<field column="61" name="WeightedAbscissa_1Source" statistic="l2norm" material_phase="fluid"/>
+<field column="62" name="WeightedAbscissa_1Source" statistic="integral" material_phase="fluid"/>
+<field column="63" name="Moment_0" statistic="min" material_phase="fluid"/>
+<field column="64" name="Moment_0" statistic="max" material_phase="fluid"/>
+<field column="65" name="Moment_0" statistic="l2norm" material_phase="fluid"/>
+<field column="66" name="Moment_0" statistic="integral" material_phase="fluid"/>
+<field column="67" name="Moment_1" statistic="min" material_phase="fluid"/>
+<field column="68" name="Moment_1" statistic="max" material_phase="fluid"/>
+<field column="69" name="Moment_1" statistic="l2norm" material_phase="fluid"/>
+<field column="70" name="Moment_1" statistic="integral" material_phase="fluid"/>
+<field column="71" name="Moment_2" statistic="min" material_phase="fluid"/>
+<field column="72" name="Moment_2" statistic="max" material_phase="fluid"/>
+<field column="73" name="Moment_2" statistic="l2norm" material_phase="fluid"/>
+<field column="74" name="Moment_2" statistic="integral" material_phase="fluid"/>
+<field column="75" name="Moment_3" statistic="min" material_phase="fluid"/>
+<field column="76" name="Moment_3" statistic="max" material_phase="fluid"/>
+<field column="77" name="Moment_3" statistic="l2norm" material_phase="fluid"/>
+<field column="78" name="Moment_3" statistic="integral" material_phase="fluid"/>
+<field column="79" name="Velocity%magnitude" statistic="min" material_phase="fluid"/>
+<field column="80" name="Velocity%magnitude" statistic="max" material_phase="fluid"/>
+<field column="81" name="Velocity%magnitude" statistic="l2norm" material_phase="fluid"/>
+<field column="82" name="Velocity%1" statistic="min" material_phase="fluid"/>
+<field column="83" name="Velocity%1" statistic="max" material_phase="fluid"/>
+<field column="84" name="Velocity%1" statistic="l2norm" material_phase="fluid"/>
+<field column="85" name="Velocity%1" statistic="integral" material_phase="fluid"/>
+<field column="86" name="Velocity%2" statistic="min" material_phase="fluid"/>
+<field column="87" name="Velocity%2" statistic="max" material_phase="fluid"/>
+<field column="88" name="Velocity%2" statistic="l2norm" material_phase="fluid"/>
+<field column="89" name="Velocity%2" statistic="integral" material_phase="fluid"/>
+<field column="90" name="Velocity%3" statistic="min" material_phase="fluid"/>
+<field column="91" name="Velocity%3" statistic="max" material_phase="fluid"/>
+<field column="92" name="Velocity%3" statistic="l2norm" material_phase="fluid"/>
+<field column="93" name="Velocity%3" statistic="integral" material_phase="fluid"/>
+</header>
