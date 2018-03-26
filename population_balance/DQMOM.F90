@@ -117,7 +117,7 @@ contains
           end if
        end do
     end do
-    
+    !!! Minimum wieghts not being applied need to fix the bug at start....................
     call dqmom_apply_min_weight(states)
 
     call dqmom_calculate_abscissa(states)
@@ -927,7 +927,6 @@ print*, "A_Matrix", A(1,:,:)
     X_at_quad(3,:) = zc
 
 !!! constants defined explicitly which will add up to form K_s
-!! two more problems to solve 1. How to import time values at each step. ; 
     K_s_1 = 2*sin(current_time)*cos(current_time)*sin(xc)*sin(xc)*sin(yc)*sin(yc)*sin(zc)*sin(zc)
     K_s_2 = 2*sin(current_time)*sin(current_time)*sin(xc)*sin(yc)*sin(zc)*(cos(xc)*sin(yc)*sin(zc) + sin(xc)*cos(yc)*sin(zc) + sin(xc)*sin(yc)*cos(zc))
     K_s_3 = -8*((sin(current_time)*sin(xc)*sin(yc)*sin(zc))**2)*exp(4.0)
@@ -971,8 +970,8 @@ print*, "A_Matrix", A(1,:,:)
           do while (SV(size(SV))/SV(1) < cond)
              ewrite(2,*) 'ill-conditioned matrix found and perturbating', SV(size(SV))/SV(1),"Perturbating for N = ", iperturb
              do j = 1, N
-! What is this j for, solution comes out of illconditioning in just one step if this j is multiplied ?? The previous code did not include j ? why?
                 abscissa_val_at_quad(i,j) = abscissa_val_at_quad(i,j) + j*perturb_val
+                print*,"Value of abscissa after perturbation",abscissa_val_at_quad(i,j)
              end do
              A = A_matrix(abscissa_val_at_quad)
              call svd(A(i,:,:), svd_tmp1, SV, svd_tmp2)
