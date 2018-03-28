@@ -763,11 +763,8 @@ contains
     
     nodes => ele_nodes(abscissa(1), ele)
     shape => ele_shape(abscissa(1), ele)
-
+! To call coordinates of each qudrature points
     X_at_quad = ele_val_at_quad(X, ele)
-    ! X_val_quad(1) is the x-coordinate vector for all quadrature points...and so on... 
-!!print*, "x-coordinates", X_at_quad(1,:) !!! For check whether x-coordinates refer to this.
-!!print*, "time_now", current_time  !!! for check whether current_time refers to the current time.
  
     call transform_to_physical(X, ele, shape, dshape=dshape, detwei=detwei)
 
@@ -922,17 +919,13 @@ contains
        end do
     endif
 print*, "Source matrix before MMS terms", S_rhs
-print*, "X matrix", X_at_quad
 !! construct S vector for MMS source terms will work only when N<=2 So take care....
     xc = X_at_quad(1,:)
 print*,"the X-coordinates", xc
-print*,"X_at_quad(1,:)", X_at_quad(1,:)
     yc = X_at_quad(2,:)
 print*,"the y-coordinates", yc
     zc = X_at_quad(3,:)
 print*,"the z-coordinates", zc
-!!! 5 quadrature points, why ?? because i am getting a 3X5 matirx which is wrong
-
 !!! constants defined explicitly which will add up to form K_s
     K_s_1 = 2*sin(current_time)*cos(current_time)*sin(xc)*sin(xc)*sin(yc)*sin(yc)*sin(zc)*sin(zc)
     K_s_2 = 2*sin(current_time)*sin(current_time)*sin(xc)*sin(yc)*sin(zc)*(cos(xc)*sin(yc)*sin(zc) + sin(xc)*cos(yc)*sin(zc) + sin(xc)*sin(yc)*cos(zc))
@@ -990,7 +983,8 @@ print*, "Source matrix after MMS terms", S_rhs
           do while (SV(size(SV))/SV(1) < cond)
              ewrite(2,*) 'ill-conditioned matrix found and perturbating', SV(size(SV))/SV(1),"Perturbating for N = ", iperturb
              do j = 1, N
-                abscissa_val_at_quad(i,j) = abscissa_val_at_quad(i,j) + j*perturb_val
+                abscissa_val_at_quad(i,j) = abscissa_val_at_quad(i,j) + (j/10.0)*perturb_val
+! Same abssicsa values can create singular matrices, hence j was multiplied to ensure different values to prevent, as j is integer it could change the value of abscissa by large hence divided by 10 
                 print*,"Value of abscissa after perturbation",abscissa_val_at_quad(i,j)
              end do
              A = A_matrix(abscissa_val_at_quad)
