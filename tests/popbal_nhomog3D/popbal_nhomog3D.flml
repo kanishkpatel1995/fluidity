@@ -671,7 +671,7 @@ for i in range(field.node_count):
         </required_condition_number>
         <perturbate>
           <perturbation>
-            <real_value rank="0">0.01</real_value>
+            <real_value rank="0">0.009</real_value>
           </perturbation>
         </perturbate>
       </ill_conditioned_matrices>

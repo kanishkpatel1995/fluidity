@@ -752,10 +752,11 @@ contains
     real, dimension(:,:,:), allocatable :: visc_ngi
     real, dimension(size(abscissa)*2, size(abscissa)*2) :: svd_tmp1, svd_tmp2
     real, dimension(size(abscissa)*2) :: SV
-    integer :: stat, N, i, j, k, iperturb
-    real :: xc, yc, zc, K_s_1, K_s_2, K_s_3, K_s_4, K_s_5, K_s_6, K_s, t
-    real :: beta
-
+    integer :: stat, N, i, j, k, iperturb, mms_int
+    real, dimension(ele_ngi(abscissa(1), ele)) :: xc ,yc, zc ,K_s_1, K_s_2, K_s_3, K_s_4, K_s_5, K_s_6, K_s
+! defined as an array because the values of variables are an array as x_at_quad(1,:), gives an array ....??? Dont know why need reason ??
+    real :: beta, gamma_function, curve_fit_function
+!yc, zc ,K_s_1, K_s_2, K_s_3, K_s_4, K_s_5, K_s_6, K_s,
     real :: sigma, density_continuous, density_dispersed
 
     N = size(abscissa)
@@ -775,8 +776,8 @@ contains
        abscissa_val_at_quad(:,i) = ele_val_at_quad(abscissa(i), ele)       
     end do
     A = A_matrix(abscissa_val_at_quad)
-print*, "Abssicca", abscissa_val_at_quad(1,:)
-print*, "A_Matrix", A(1,:,:)
+!print*, "Abssicca", abscissa_val_at_quad(1,:)
+!print*, "A_Matrix", A(1,:,:)
 
     ! construct A_3 matrix (rhs pt.1)
     do i = 1, 2*N
@@ -920,27 +921,46 @@ print*, "A_Matrix", A(1,:,:)
           end do
        end do
     endif
-
-    !! construct S vector for MMS source terms will work only when N<=2 So take care....
-    X_at_quad(1,:) = xc
-    X_at_quad(2,:) = yc
-    X_at_quad(3,:) = zc
+print*, "Source matrix before MMS terms", S_rhs
+print*, "X matrix", X_at_quad
+!! construct S vector for MMS source terms will work only when N<=2 So take care....
+    xc = X_at_quad(1,:)
+print*,"the X-coordinates", xc
+print*,"X_at_quad(1,:)", X_at_quad(1,:)
+    yc = X_at_quad(2,:)
+print*,"the y-coordinates", yc
+    zc = X_at_quad(3,:)
+print*,"the z-coordinates", zc
+!!! 5 quadrature points, why ?? because i am getting a 3X5 matirx which is wrong
 
 !!! constants defined explicitly which will add up to form K_s
     K_s_1 = 2*sin(current_time)*cos(current_time)*sin(xc)*sin(xc)*sin(yc)*sin(yc)*sin(zc)*sin(zc)
     K_s_2 = 2*sin(current_time)*sin(current_time)*sin(xc)*sin(yc)*sin(zc)*(cos(xc)*sin(yc)*sin(zc) + sin(xc)*cos(yc)*sin(zc) + sin(xc)*sin(yc)*cos(zc))
-    K_s_3 = -8*((sin(current_time)*sin(xc)*sin(yc)*sin(zc))**2)*exp(4.0)
+    K_s_3 = -8*((sin(current_time)*sin(xc)*sin(yc)*sin(zc))**2)
     K_s_4 =  (sin(current_time)*sin(xc)*sin(yc)*sin(zc))**2
     K_s_5 = -1*((sin(current_time)*sin(xc)*sin(yc)*sin(zc))**4)
-    K_s_6 = 1*((sin(current_time)*sin(xc)*sin(yc)*sin(zc))**4)
+    K_s_6 = 1*((sin(current_time)*sin(xc)*sin(yc)*sin(zc))**4)*(3.1415927/4)
 
 ! summation of constants for general function ......        
-    K_s = K_s_1 + K_s_2 +  K_s_3 + K_s_4 + K_s_6     
+    K_s = K_s_1 + K_s_2 + K_s_4 + K_s_6
+print*,"the contants ks", K_s 
+print*,"the contants ks3", K_s_3 
+print*,"the contants ks5", K_s_5     
        !!! will work only when N<=2 .... Take care 
        do i = 1, 2*N
-         S_rhs(:,i) = S_rhs(:,i) + (K_s*(((-1)**i)+1) * gamma((i+1.0)/2)) + (K_s_5 * (1.9882*i - 1.8277*i*i + 0.4168*i*i*i))
+          mms_int = i-1
+	  gamma_function = 0.5 * (((-1)**mms_int)+1) * gamma((mms_int+1.0)/2)
+	  curve_fit_function = (1.9882*mms_int - 1.8277*mms_int*mms_int + 0.4168*mms_int*mms_int*mms_int)
+	  S_rhs(:,i) = S_rhs(:,i) + K_s*gamma_function + K_s_3*(2**(-mms_int-1))*gamma_function + K_s_5 * curve_fit_function 
+	  print*, "The MMS Source terms, ",S_rhs(:,i)
+          print*,"the gamma function values ", gamma_function 
+          print*,"the curve fit function values", curve_fit_function
+          print*,"checking if gamma function works or not ?", gamma((mms_int+1.0)/2)
+          print*,"checking even odd values as predicted appearing or not?", ((-1)**mms_int)+1
+! The source term is not what is expected mathematically ? Can't figure out the problem? need help  with code a bit. 
        end do 
-
+print*, "Source matrix after MMS terms", S_rhs
+!!print*,"The complete Source matrix",S_rhs
     ! check for ill-conditioned matrices
     if (singular_option=='set_source_to_zero') then
        do i = 1, ele_ngi(abscissa(1), ele)
