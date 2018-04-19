@@ -933,12 +933,18 @@ print*,"the y-coordinates", yc
     zc = X_at_quad(3,:)
 print*,"the z-coordinates", zc
 !!! constants defined explicitly which will add up to form K_s
+    !transient term 
     K_s_1 = -1.0 * sin(2*current_time)*((cos(xc)*cos(yc)*cos(zc))**2)
-    K_s_2 =  2*xc + 2*yc + 2*zc - sin(2*xc)*((cos(current_time)*cos(yc)*cos(zc))**2) - sin(2*yc)*((cos(current_time)*cos(xc)*cos(zc))**2) - sin(2*zc)*((cos(current_time)*cos(yc)*cos(xc))**2)
+    !convective term 
+    K_s_2 = 2.0*xc + 2*yc + 2*zc + sin(2*xc)*((cos(current_time)*cos(yc)*cos(zc))**2) + sin(2*yc)*((cos(current_time)*cos(xc)*cos(zc))**2) + sin(2*zc)*((cos(current_time)*cos(yc)*cos(xc))**2)
+    !Birth term due to breakage
     K_s_3 = (xc**2 + yc**2 + zc**2 + (((cos(current_time)*cos(xc)*cos(yc)*cos(zc))**2))) * (-4.0)
-    K_s_4 = (xc**2 + yc**2 + zc**2 + (((cos(current_time)*cos(xc)*cos(yc)*cos(zc))**2)))
+    !Death term due to breakage
+    K_s_4 = 1.0 * (xc**2 + yc**2 + zc**2 + (((cos(current_time)*cos(xc)*cos(yc)*cos(zc))**2)))
+    !Birth term due to coalescence 
     K_s_5 = -0.5 * 1.0 * ((xc**2 + yc**2 + zc**2 + (((cos(current_time)*cos(xc)*cos(yc)*cos(zc))**2)))**2)
-    K_s_6 = 0.5 * 1.0 * ((xc**2 + yc**2 + zc**2 + (((cos(current_time)*cos(xc)*cos(yc)*cos(zc))**2)))**2) * sqrt(PI)
+    !Death term due to coalscence
+    K_s_6 = 1.0 *0.5 * ((xc**2 + yc**2 + zc**2 + (((cos(current_time)*cos(xc)*cos(yc)*cos(zc))**2)))**2) * sqrt(PI)
 
 ! summation of constants for general function ......        
     K_s = K_s_1 + K_s_2 + K_s_4 + K_s_6
@@ -949,8 +955,10 @@ print*,"the contants ks5", K_s_5
        do i = 1, 2*N
           mms_int = i-1.0
           gamma_function   =  0.5 * gamma((mms_int + 1.0)*0.5)
-	  curve_fit_function = 1.64506 - 0.610269*i + 0.125306*i*i + 0.0180034*i*i*i
-	  S_rhs(:,i) = S_rhs(:,i) +  (K_s*gamma_function  +  K_s_3*(2**(-mms_int-2.0))*gamma_function +  K_s_5*curve_fit_function) 
+          print*, "gamma_function", gamma_function
+	  curve_fit_function = 1.64505 - 0.610269*i + 0.125306*i*i + 0.0180034*i*i*i
+          !print*, "curve_fit_function", curve_fit_function
+	  S_rhs(:,i) = S_rhs(:,i) +  (K_s*gamma_function  +  K_s_3*(2**((-1.0*mms_int)-2.0))*2.0*gamma_function +  K_s_5*curve_fit_function)
 	  print*, "The MMS Source terms AFTER, ",S_rhs(:,i) 
        end do 
 print*, "Source matrix after MMS terms", S_rhs
@@ -981,7 +989,7 @@ print*, "Source matrix after MMS terms", S_rhs
        do i = 1, ele_ngi(abscissa(1), ele)
           call svd(A(i,:,:), svd_tmp1, SV, svd_tmp2)
 	  iperturb = 1
-          do while (SV(size(SV))/SV(1) < cond)
+          do while (SV(size(SV))/SV(1) < cond.and.iperturb < 10)
              ewrite(2,*) 'ill-conditioned matrix found and perturbating', SV(size(SV))/SV(1),"Perturbating for N = ", iperturb
              do j = 1, N
                 abscissa_val_at_quad(i,j) = abscissa_val_at_quad(i,j) + (j)*perturb_val

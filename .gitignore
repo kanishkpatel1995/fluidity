@@ -9,3 +9,6 @@ fluidity.err-0
 *.log-0.swo
 *.stat
 *.csv
+matrixdump
+matrixdump.info
+
