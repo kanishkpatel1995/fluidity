@@ -936,7 +936,7 @@ print*,"the z-coordinates", zc
     !transient term 
     K_s_1 = -1.0 * sin(2*current_time)*((cos(xc)*cos(yc)*cos(zc))**2)
     !convective term 
-    K_s_2 = 2.0*xc + 2*yc + 2*zc + sin(2*xc)*((cos(current_time)*cos(yc)*cos(zc))**2) + sin(2*yc)*((cos(current_time)*cos(xc)*cos(zc))**2) + sin(2*zc)*((cos(current_time)*cos(yc)*cos(xc))**2)
+    K_s_2 = 2.0*xc + 2*yc + 2*zc - sin(2*xc)*((cos(current_time)*cos(yc)*cos(zc))**2) - sin(2*yc)*((cos(current_time)*cos(xc)*cos(zc))**2) - sin(2*zc)*((cos(current_time)*cos(yc)*cos(xc))**2)
     !Birth term due to breakage
     K_s_3 = (xc**2 + yc**2 + zc**2 + (((cos(current_time)*cos(xc)*cos(yc)*cos(zc))**2))) * (-4.0)
     !Death term due to breakage
