@@ -759,8 +759,8 @@ contains
     real, dimension(size(abscissa)*2) :: SV
     integer :: stat, N, i, j, k, iperturb
     real, dimension(ele_ngi(abscissa(1), ele)) :: xc ,yc, zc ,K_s_1, K_s_2, K_s_3, K_s_4, K_s_5, K_s_6, K_s
-! defined as an array because the values of variables are an array as x_at_quad(1,:), gives an array ....??? Dont know why need reason ??
-    real :: beta, gamma_function, curve_fit_function, gamma_function_3, mms_int
+    real, dimension(4) :: S_3_moment_array
+    real :: beta, gamma_function, gamma_function_3, mms_int
 !yc, zc ,K_s_1, K_s_2, K_s_3, K_s_4, K_s_5, K_s_6, K_s,
     real :: sigma, density_continuous, density_dispersed, PI, c_bug
     PI=4.D0*DATAN(1.D0)
@@ -956,9 +956,9 @@ print*,"the contants ks5", K_s_5
           mms_int = i-1.0
           gamma_function   =  0.5 * gamma((mms_int + 1.0)*0.5)
           print*, "gamma_function", gamma_function
-	  curve_fit_function = 1.64505 - 0.610269*i + 0.125306*i*i + 0.0180034*i*i*i
-          !print*, "curve_fit_function", curve_fit_function
-	  S_rhs(:,i) = S_rhs(:,i) +  (K_s*gamma_function  +  K_s_3*(2**((-1.0*mms_int)-2.0))*2.0*gamma_function +  K_s_5*curve_fit_function)
+	  S_3_moment_array = (/3*PI*0.125, 0.25*sqrt(PI)*(1+sqrt(2.0)),0.125*(2.0+(3*PI)), 0.5*sqrt(PI)*(1.25+sqrt(2.0))/)
+          print*, "S_3_moment_array for", i,  S_3_moment_array(i)
+	  S_rhs(:,i) = S_rhs(:,i) +  (K_s*gamma_function  +  K_s_3*(2**((-1.0*mms_int)-2.0))*2.0*gamma_function +  K_s_5*S_3_moment_array(i))
 	  print*, "The MMS Source terms AFTER, ",S_rhs(:,i) 
        end do 
 print*, "Source matrix after MMS terms", S_rhs
