@@ -758,7 +758,7 @@ contains
     real, dimension(size(abscissa)*2, size(abscissa)*2) :: svd_tmp1, svd_tmp2
     real, dimension(size(abscissa)*2) :: SV
     integer :: stat, N, i, j, k, iperturb
-    real, dimension(ele_ngi(abscissa(1), ele)) :: xc ,yc, zc ,K_s_1, K_s_2, K_s_3, K_s_4, K_s_5, K_s_6, K_s
+    real, dimension(ele_ngi(abscissa(1), ele)) :: xc ,yc, zc ,K_s_1, K_s_2, K_s_3, K_s_4, K_s_5, K_s_6, K_s, MMS_source_term
     real, dimension(4) :: S_3_moment_array
     real :: beta, gamma_function, gamma_function_3, mms_int
 !yc, zc ,K_s_1, K_s_2, K_s_3, K_s_4, K_s_5, K_s_6, K_s,
@@ -934,17 +934,17 @@ print*,"the y-coordinates", yc
 print*,"the z-coordinates", zc
 !!! constants defined explicitly which will add up to form K_s
     !transient term 
-    K_s_1 = -2*current_time
+    K_s_1 = -1.0 * sin(2*current_time)*((cos(xc)*cos(yc)*cos(zc))**2)
     !convective term 
-    K_s_2 = -2.0*xc - 2.0*yc - 2.0*zc
+    K_s_2 = 2.0*xc + 2*yc + 2*zc - sin(2*xc)*((cos(current_time)*cos(yc)*cos(zc))**2) - sin(2*yc)*((cos(current_time)*cos(xc)*cos(zc))**2) - sin(2*zc)*((cos(current_time)*cos(yc)*cos(xc))**2)
     !Birth term due to breakage
-    K_s_3 = (-xc**2 - yc**2 - zc**2 - current_time**2.0 - 0.1) * (-4.0)
+    K_s_3 = (xc**2 + yc**2 + zc**2 + (((cos(current_time)*cos(xc)*cos(yc)*cos(zc))**2))) * (-4.0)
     !Death term due to breakage
-    K_s_4 = 1.0 * (-xc**2 - yc**2 - zc**2 - current_time**2.0 - 0.1)
+    K_s_4 = 1.0 * (xc**2 + yc**2 + zc**2 + (((cos(current_time)*cos(xc)*cos(yc)*cos(zc))**2)))
     !Birth term due to coalescence 
-    K_s_5 = -0.5 * 1.0 * (-xc**2 - yc**2 - zc**2 - current_time**2.0 - 0.1)**2.0
+    K_s_5 = -0.5 * 1.0 * ((xc**2 + yc**2 + zc**2 + (((cos(current_time)*cos(xc)*cos(yc)*cos(zc))**2)))**2)
     !Death term due to coalscence
-    K_s_6 = 1.0 *0.5 * (-xc**2 - yc**2 - zc**2 - current_time**2.0 - 0.1)**2.0 * sqrt(PI)
+    K_s_6 = 1.0 *0.5 * ((xc**2 + yc**2 + zc**2 + (((cos(current_time)*cos(xc)*cos(yc)*cos(zc))**2)))**2) * sqrt(PI)
 
 ! summation of constants for general function ......        
     K_s = K_s_1 + K_s_2 + K_s_4 + K_s_6
@@ -958,7 +958,8 @@ print*,"the contants ks5", K_s_5
           print*, "gamma_function", gamma_function
 	  S_3_moment_array = (/3*PI*0.125, 0.25*sqrt(PI)*(1+sqrt(2.0)),0.125*(2.0+(3*PI)), 0.5*sqrt(PI)*(1.25+sqrt(2.0))/)
           print*, "S_3_moment_array for", i,  S_3_moment_array(i)
-	  S_rhs(:,i) = S_rhs(:,i) +  (K_s*gamma_function  +  K_s_3*(2**((-1.0*mms_int)-2.0))*2.0*gamma_function +  K_s_5*S_3_moment_array(i))
+          MMS_source_term = K_s*gamma_function  +  K_s_3*(2**((-1.0*mms_int)-2.0))*2.0*gamma_function +  K_s_5*S_3_moment_array(i)
+	  S_rhs(:,i) = S_rhs(:,i) +  MMS_source_term
 	  print*, "The MMS Source terms AFTER, ",S_rhs(:,i) 
        end do 
 print*, "Source matrix after MMS terms", S_rhs
