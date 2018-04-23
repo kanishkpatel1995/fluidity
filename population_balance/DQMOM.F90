@@ -934,17 +934,17 @@ print*,"the y-coordinates", yc
 print*,"the z-coordinates", zc
 !!! constants defined explicitly which will add up to form K_s
     !transient term 
-    K_s_1 = 2*current_time
+    K_s_1 = -2*current_time
     !convective term 
-    K_s_2 = 2.0*xc + 2.0*yc + 2.0*zc
+    K_s_2 = -2.0*xc - 2.0*yc - 2.0*zc
     !Birth term due to breakage
-    K_s_3 = (xc**2 + yc**2 + zc**2 + current_time**2.0 + 0.1) * (-4.0)
+    K_s_3 = (-xc**2 - yc**2 - zc**2 - current_time**2.0 - 0.1) * (-4.0)
     !Death term due to breakage
-    K_s_4 = 1.0 * (xc**2 + yc**2 + zc**2 + current_time**2.0 + 0.1)
+    K_s_4 = 1.0 * (-xc**2 - yc**2 - zc**2 - current_time**2.0 - 0.1)
     !Birth term due to coalescence 
-    K_s_5 = -0.5 * 1.0 * (xc**2 + yc**2 + zc**2 + current_time**2.0 + 0.1)**2.0
+    K_s_5 = -0.5 * 1.0 * (-xc**2 - yc**2 - zc**2 - current_time**2.0 - 0.1)**2.0
     !Death term due to coalscence
-    K_s_6 = 1.0 *0.5 * (xc**2 + yc**2 + zc**2 + current_time**2.0 + 0.1)**2.0 * sqrt(PI)
+    K_s_6 = 1.0 *0.5 * (-xc**2 - yc**2 - zc**2 - current_time**2.0 - 0.1)**2.0 * sqrt(PI)
 
 ! summation of constants for general function ......        
     K_s = K_s_1 + K_s_2 + K_s_4 + K_s_6
