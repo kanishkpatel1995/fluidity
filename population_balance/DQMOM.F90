@@ -942,9 +942,9 @@ print*,"the z-coordinates", zc
     !Death term due to breakage
     K_s_4 = 1.0 * (xc**2 + yc**2 + zc**2 + current_time**2.0 + 0.1)
     !Birth term due to coalescence 
-    K_s_5 = -0.5 * 1.0 * (xc**2 + yc**2 + zc**2 + current_time**2.0 + 0.1)
+    K_s_5 = -0.5 * 1.0 * (xc**2 + yc**2 + zc**2 + current_time**2.0 + 0.1)**2.0
     !Death term due to coalscence
-    K_s_6 = 1.0 *0.5 * (xc**2 + yc**2 + zc**2 + current_time**2.0 + 0.1) * sqrt(PI)
+    K_s_6 = 1.0 *0.5 * (xc**2 + yc**2 + zc**2 + current_time**2.0 + 0.1)**2.0 * sqrt(PI)
 
 ! summation of constants for general function ......        
     K_s = K_s_1 + K_s_2 + K_s_4 + K_s_6
