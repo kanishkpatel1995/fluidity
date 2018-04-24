@@ -934,17 +934,17 @@ print*,"the y-coordinates", yc
 print*,"the z-coordinates", zc
 !!! constants defined explicitly which will add up to form K_s
     !transient term 
-    K_s_1 = -1.0 * sin(2*current_time)*((cos(xc)*cos(yc)*cos(zc))**2)
+    K_s_1 = -1.0 * sin(2*current_time)*((cos(xc)*cos(yc))**2)
     !convective term 
-    K_s_2 = 2.0*xc + 2*yc + 2*zc - sin(2*xc)*((cos(current_time)*cos(yc)*cos(zc))**2) - sin(2*yc)*((cos(current_time)*cos(xc)*cos(zc))**2) - sin(2*zc)*((cos(current_time)*cos(yc)*cos(xc))**2)
+    K_s_2 = 2.0*xc + 2*yc - sin(2*xc)*(cos(current_time)*cos(yc))**2 - sin(2*yc)*(cos(current_time)*cos(xc))**2
     !Birth term due to breakage
-    K_s_3 = (xc**2 + yc**2 + zc**2 + (((cos(current_time)*cos(xc)*cos(yc)*cos(zc))**2))) * (-4.0)
+    K_s_3 = (xc**2 + yc**2 + (((cos(current_time)*cos(xc)*cos(yc))**2))) * (-4.0)
     !Death term due to breakage
-    K_s_4 = 1.0 * (xc**2 + yc**2 + zc**2 + (((cos(current_time)*cos(xc)*cos(yc)*cos(zc))**2)))
+    K_s_4 = 1.0 * (xc**2 + yc**2 + (((cos(current_time)*cos(xc)*cos(yc))**2)))
     !Birth term due to coalescence 
-    K_s_5 = -0.5 * 1.0 * ((xc**2 + yc**2 + zc**2 + (((cos(current_time)*cos(xc)*cos(yc)*cos(zc))**2)))**2)
+    K_s_5 = -0.5 * 1.0 * ((xc**2 + yc**2 + (((cos(current_time)*cos(xc)*cos(yc))**2)))**2)
     !Death term due to coalscence
-    K_s_6 = 1.0 *0.5 * ((xc**2 + yc**2 + zc**2 + (((cos(current_time)*cos(xc)*cos(yc)*cos(zc))**2)))**2) * sqrt(PI)
+    K_s_6 = 1.0 *0.5 * ((xc**2 + yc**2 + (((cos(current_time)*cos(xc)*cos(yc))**2)))**2) * sqrt(PI)
 
 ! summation of constants for general function ......        
     K_s = K_s_1 + K_s_2 + K_s_4 + K_s_6
