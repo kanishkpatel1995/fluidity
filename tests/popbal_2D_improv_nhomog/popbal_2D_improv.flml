@@ -11,7 +11,7 @@
       <integer_value rank="0">2</integer_value>
     </dimension>
     <mesh name="CoordinateMesh">
-      <from_file file_name="src/channel">
+      <from_file file_name="src/square_pi">
         <format name="gmsh"/>
         <stat>
           <include_in_stat/>

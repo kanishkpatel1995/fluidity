@@ -37,7 +37,7 @@ def configure_plugins(suffix):
   if "DIAMOND_CONFIG_PATH" in os.environ:
     dirs += os.environ["DIAMOND_CONFIG_PATH"].split(":")
   dirs.append(os.path.join(homedir, ".diamond", "plugins", suffix))
-  dirs.append("/home/kanishk/Downloads/fluidity-master/libspud/../share/diamond/plugins/" + suffix)
+  dirs.append("/home/kanishk/fluidity/libspud/../share/diamond/plugins/" + suffix)
   if sys.platform != "win32" and sys.platform != "win64":
     dirs.append("/etc/diamond/plugins/" + suffix)
 

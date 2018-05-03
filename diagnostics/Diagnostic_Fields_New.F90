@@ -37,19 +37,19 @@ module diagnostic_fields_new
   use state_module
   use field_options
 
-  use mass_matrix_diagnostics
-  use mesh_diagnostics
-  use simple_diagnostics
-  use metric_diagnostics
-  use multiphase_diagnostics
+  use python_diagnostics
   use tidal_diagnostics
-  use parallel_diagnostics
+  use simple_diagnostics
+  use multiphase_diagnostics
+  use mesh_diagnostics
   use binary_operators
   use differential_operator_diagnostics
-  use python_diagnostics
-  use field_copies_diagnostics
+  use metric_diagnostics
+  use parallel_diagnostics
   use momentum_diagnostics
+  use mass_matrix_diagnostics
   use surface_diagnostics
+  use field_copies_diagnostics
 
   
   implicit none
@@ -859,16 +859,10 @@ contains
       case("Internal")
         ! Not handled here
       
-      case("finite_element_lumped_mass_matrix")
-        call calculate_finite_element_lumped_mass_matrix(state, s_field)
-      case("control_volume_mass_matrix")
-        call calculate_control_volume_mass_matrix(state, s_field)
-      case("column_ids")
-        call calculate_column_ids(state, s_field)
-      case("universal_column_ids")
-        call calculate_universal_column_ids(state, s_field)
-      case("mesh_quality")
-        call calculate_mesh_quality(state, s_field)
+      case("free_surface_history")
+        call calculate_free_surface_history(state, s_field)
+      case("tidal_harmonics")
+        call calculate_tidal_harmonics(state, s_field)
       case("temporalmax_scalar")
         call calculate_temporalmax_scalar(state, s_field)
       case("temporalmin")
@@ -881,22 +875,12 @@ contains
         call calculate_period_averaged_scalar(state, s_field)
       case("time_averaged_scalar_squared")
         call calculate_time_averaged_scalar_squared(state, s_field)
-      case("scalar_edge_lengths")
-        call calculate_scalar_edge_lengths(state, s_field)
-      case("free_surface_history")
-        call calculate_free_surface_history(state, s_field)
-      case("tidal_harmonics")
-        call calculate_tidal_harmonics(state, s_field)
-      case("node_halo")
-        call calculate_node_halo(s_field)
-      case("universal_numbering")
-        call calculate_universal_numbering(s_field)
-      case("element_halo")
-        call calculate_element_halo(s_field)
-      case("element_ownership")
-        call calculate_element_ownership(s_field)
-      case("element_universal_numbering")
-        call calculate_element_universal_numbering(s_field)
+      case("column_ids")
+        call calculate_column_ids(state, s_field)
+      case("universal_column_ids")
+        call calculate_universal_column_ids(state, s_field)
+      case("mesh_quality")
+        call calculate_mesh_quality(state, s_field)
       case("scalar_sum")
         call calculate_scalar_sum(state, s_field)
       case("scalar_difference")
@@ -911,6 +895,36 @@ contains
         call calculate_scalar_advection(state, s_field)
       case("scalar_laplacian")
         call calculate_scalar_laplacian(state, s_field)
+      case("scalar_edge_lengths")
+        call calculate_scalar_edge_lengths(state, s_field)
+      case("node_halo")
+        call calculate_node_halo(s_field)
+      case("universal_numbering")
+        call calculate_universal_numbering(s_field)
+      case("element_halo")
+        call calculate_element_halo(s_field)
+      case("element_ownership")
+        call calculate_element_ownership(s_field)
+      case("element_universal_numbering")
+        call calculate_element_universal_numbering(s_field)
+      case("strain_rate_second_invariant")
+        call calculate_strain_rate_second_invariant(state, s_field)
+      case("tensor_second_invariant")
+        call calculate_tensor_second_invariant(state, s_field)
+      case("viscous_dissipation")
+        call calculate_viscous_dissipation(state, s_field)
+      case("scalar_potential")
+        call calculate_scalar_potential(state, s_field)
+      case("projection_scalar_potential")
+        call calculate_projection_scalar_potential(state, s_field)
+      case("finite_element_lumped_mass_matrix")
+        call calculate_finite_element_lumped_mass_matrix(state, s_field)
+      case("control_volume_mass_matrix")
+        call calculate_control_volume_mass_matrix(state, s_field)
+      case("grad_normal")
+        call calculate_grad_normal(state, s_field)
+      case("surface_horizontal_divergence")
+        call calculate_surface_horizontal_divergence(state, s_field)
       case("scalar_copy")
         call calculate_scalar_copy(state, s_field)
       case("extract_scalar_component")
@@ -923,28 +937,14 @@ contains
         call calculate_helmholtz_anisotropic_smoothed_scalar(state, s_field)
       case("lumped_mass_smoothed_scalar")
         call calculate_lumped_mass_smoothed_scalar(state, s_field)
-      case("strain_rate_second_invariant")
-        call calculate_strain_rate_second_invariant(state, s_field)
-      case("tensor_second_invariant")
-        call calculate_tensor_second_invariant(state, s_field)
-      case("viscous_dissipation")
-        call calculate_viscous_dissipation(state, s_field)
-      case("scalar_potential")
-        call calculate_scalar_potential(state, s_field)
-      case("projection_scalar_potential")
-        call calculate_projection_scalar_potential(state, s_field)
-      case("grad_normal")
-        call calculate_grad_normal(state, s_field)
-      case("surface_horizontal_divergence")
-        call calculate_surface_horizontal_divergence(state, s_field)
 
       ! Diagnostic algorithms that require the full states array
+      case("scalar_python_diagnostic")
+        call calculate_scalar_python_diagnostic(states, state_index, s_field, current_time, dt)
       case("particle_reynolds_number")
         call calculate_particle_reynolds_number(states, state_index, s_field)
       case("apparent_density")
         call calculate_apparent_density(states, state_index, s_field)
-      case("scalar_python_diagnostic")
-        call calculate_scalar_python_diagnostic(states, state_index, s_field, current_time, dt)
 
 
       case default
@@ -1024,8 +1024,6 @@ contains
         call calculate_time_averaged_vector(state, v_field)
       case("time_averaged_vector_times_scalar")
         call calculate_time_averaged_vector_times_scalar(state, v_field)
-      case("eigenvalues_symmetric")
-        call calculate_eigenvalues_symmetric(state, v_field)
       case("vector_sum")
         call calculate_vector_sum(state, v_field)
       case("vector_difference")
@@ -1042,6 +1040,14 @@ contains
         call calculate_vector_advection(state, v_field)
       case("vector_laplacian")
         call calculate_vector_laplacian(state, v_field)
+      case("eigenvalues_symmetric")
+        call calculate_eigenvalues_symmetric(state, v_field)
+      case("buoyancy")
+        call calculate_buoyancy(state, v_field)
+      case("coriolis")
+        call calculate_coriolis(state, v_field)
+      case("geostrophic_velocity")
+        call calculate_geostrophic_velocity(state, v_field)
       case("vector_copy")
         call calculate_vector_copy(state, v_field)
       case("vector_galerkin_projection")
@@ -1052,12 +1058,6 @@ contains
         call calculate_helmholtz_anisotropic_smoothed_vector(state, v_field)
       case("lumped_mass_smoothed_vector")
         call calculate_lumped_mass_smoothed_vector(state, v_field)
-      case("buoyancy")
-        call calculate_buoyancy(state, v_field)
-      case("coriolis")
-        call calculate_coriolis(state, v_field)
-      case("geostrophic_velocity")
-        call calculate_geostrophic_velocity(state, v_field)
 
       
       case("vector_python_diagnostic")
@@ -1140,14 +1140,18 @@ contains
       case("Internal")
         ! Not handled here
       
-      case("field_tolerance")
-        call calculate_field_tolerance(state, t_field)
       case("tensor_difference")
         call calculate_tensor_difference(state, t_field)
       case("grad_vector")
         call calculate_grad_vector(state, t_field)
       case("hessian")
         call calculate_hessian(state, t_field)
+      case("field_tolerance")
+        call calculate_field_tolerance(state, t_field)
+      case("strain_rate")
+        call calculate_strain_rate(state, t_field)
+      case("sediment_concentration_dependent_viscosity")
+        call calculate_sediment_concentration_dependent_viscosity(state, t_field)
       case("tensor_copy")
         call calculate_tensor_copy(state, t_field)
       case("helmholtz_smoothed_tensor")
@@ -1156,10 +1160,6 @@ contains
         call calculate_helmholtz_anisotropic_smoothed_tensor(state, t_field)
       case("lumped_mass_smoothed_tensor")
         call calculate_lumped_mass_smoothed_tensor(state, t_field)
-      case("strain_rate")
-        call calculate_strain_rate(state, t_field)
-      case("sediment_concentration_dependent_viscosity")
-        call calculate_sediment_concentration_dependent_viscosity(state, t_field)
 
       
       case("tensor_python_diagnostic")

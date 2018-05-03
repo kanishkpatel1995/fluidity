@@ -38,6 +38,7 @@
 #define HAVE_LIBMETIS 1
 #define HAVE_LIBPARMETIS 1
 #define HAVE_PARMETIS_H 1
+#define HAVE_ZOLTAN 1
 #define DOUBLEP 1
 #define STREAM_IO
 #define SIGNAL
@@ -45,4 +46,3 @@
 #define SIZEOF_VOID_P 8
 #define HAVE_JUDY 1
 #define HAVE_SPUD 1
-#define HAVE_MBA_2D 1

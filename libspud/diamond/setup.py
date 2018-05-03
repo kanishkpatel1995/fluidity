@@ -52,7 +52,7 @@ if sys.platform == 'darwin' and packaging:
 else:
 	for plugin in plugin_dirs:
 	  if prefix is None:
-		plugin_data_files.append(("/home/kanishk/Downloads/fluidity-master/libspud/../share/diamond/plugins/" + plugin,
+		plugin_data_files.append(("/home/kanishk/fluidity/libspud/../share/diamond/plugins/" + plugin,
 		  glob.glob('plugins/' + plugin + '/*.py')))
 	  else:
 		plugin_data_files.append((prefix + "/share/diamond/plugins/" + plugin,
@@ -65,7 +65,7 @@ if sys.platform == 'darwin' and packaging	:
     ["gui/gui.glade", "gui/diamond.svg", "gui/diamond.png"]))
 else:
 	if prefix is None:
-	  gui_data_files.append(("/home/kanishk/Downloads/fluidity-master/libspud/../share/diamond/gui",
+	  gui_data_files.append(("/home/kanishk/fluidity/libspud/../share/diamond/gui",
 		["gui/gui.glade", "gui/diamond.svg"]))
 	else:
 	  gui_data_files.append((prefix + "/share/diamond/gui",
